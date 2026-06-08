@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.vaultgallery.app"
-        minSdk = 29 // Android 10+
+        minSdk = 26 // Android 8.0+ (installs on Android 9 devices)
         targetSdk = 34
         versionCode = 1
         versionName = "1.0.0"

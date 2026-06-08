@@ -5,7 +5,7 @@ looks like an ordinary **calculator**; the real encrypted gallery only opens whe
 type your secret PIN into the calculator and press `=`.
 
 > Built with Kotlin, Jetpack Compose, Material 3, MVVM, Hilt, Room, Media3/ExoPlayer,
-> CameraX, WorkManager and the Android Keystore. Minimum SDK 29 (Android 10).
+> CameraX, WorkManager and the Android Keystore. Minimum SDK 26 (Android 8.0).
 
 ---
 

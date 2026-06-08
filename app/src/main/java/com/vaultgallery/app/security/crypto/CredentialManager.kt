@@ -18,7 +18,7 @@ import android.util.Base64
  */
 @Singleton
 class CredentialManager @Inject constructor(
-    @ApplicationContext context: Context
+    @ApplicationContext private val context: Context
 ) {
     companion object {
         private const val PREFS_NAME = "vault_credentials"
@@ -32,13 +32,17 @@ class CredentialManager @Inject constructor(
         private const val K_FAILED_ATTEMPTS = "failed_attempts"
     }
 
-    private val prefs = EncryptedSharedPreferences.create(
-        context,
-        PREFS_NAME,
-        MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build(),
-        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-    )
+    // Lazy so the (relatively expensive) Keystore-backed prefs are not built on the
+    // main thread during DI at launcher start-up. Created on first credential access.
+    private val prefs by lazy {
+        EncryptedSharedPreferences.create(
+            context,
+            PREFS_NAME,
+            MasterKey.Builder(context).setKeyScheme(MasterKey.KeyScheme.AES256_GCM).build(),
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+    }
 
     val isVaultConfigured: Boolean get() = prefs.contains(K_REAL_HASH)
     val isFakeVaultConfigured: Boolean get() = prefs.contains(K_FAKE_HASH)

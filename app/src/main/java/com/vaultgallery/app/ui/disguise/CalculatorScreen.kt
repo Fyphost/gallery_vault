@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
  */
 @Composable
 fun CalculatorScreen(
-    onSecretEntered: (String) -> Boolean
+    onSecretEntered: (String) -> Unit
 ) {
     var display by remember { mutableStateOf("0") }
     var expression by remember { mutableStateOf("") }
@@ -41,10 +41,10 @@ fun CalculatorScreen(
         when (key) {
             "C" -> { display = "0"; expression = ""; pendingNumeric = "" }
             "=" -> {
-                // Secret check uses the digits entered so far.
-                if (pendingNumeric.isNotEmpty() && onSecretEntered(pendingNumeric)) {
-                    return
-                }
+                // Fire the secret check (verified asynchronously by the host activity).
+                // The calculator always computes a result too, so to an observer this
+                // looks exactly like normal calculator use.
+                if (pendingNumeric.isNotEmpty()) onSecretEntered(pendingNumeric)
                 val result = evaluate(expression.ifEmpty { display })
                 display = result
                 expression = result

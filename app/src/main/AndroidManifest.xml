@@ -7,6 +7,10 @@
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    <!-- Needed to delete the original from the gallery after import on Android <= 9.
+         On API 29+ removing other apps' media requires a user-confirmed request. -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
 
     <!-- Camera for import + intruder selfie -->
     <uses-permission android:name="android.permission.CAMERA" />

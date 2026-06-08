@@ -1,6 +1,7 @@
 package com.vaultgallery.app.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavType
@@ -44,6 +45,17 @@ fun VaultApp(shellViewModel: AppShellViewModel = hiltViewModel()) {
             !current.onboarded -> Routes.ONBOARDING
             !unlocked -> Routes.LOCK
             else -> Routes.HOME
+        }
+
+        // Security: when the session locks (auto-lock on background), force the UI back
+        // to the lock screen and clear the back stack so vault content can't be seen.
+        LaunchedEffect(unlocked) {
+            if (current.onboarded && !unlocked) {
+                navController.navigate(Routes.LOCK) {
+                    popUpTo(0) { inclusive = true }
+                    launchSingleTop = true
+                }
+            }
         }
 
         NavHost(navController = navController, startDestination = start) {

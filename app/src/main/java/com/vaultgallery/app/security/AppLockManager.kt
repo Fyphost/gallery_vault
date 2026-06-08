@@ -4,6 +4,7 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.vaultgallery.app.data.prefs.VaultPreferences
+import com.vaultgallery.app.media.PlaybackPreparer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
@@ -19,7 +20,8 @@ import javax.inject.Singleton
 @Singleton
 class AppLockManager @Inject constructor(
     private val session: VaultSession,
-    private val preferences: VaultPreferences
+    private val preferences: VaultPreferences,
+    private val playbackPreparer: PlaybackPreparer
 ) : DefaultLifecycleObserver {
 
     private val scope = CoroutineScope(SupervisorJob())
@@ -32,7 +34,9 @@ class AppLockManager @Inject constructor(
     }
 
     override fun onStop(owner: LifecycleOwner) {
-        // App moved to background.
+        // App moved to background. Wipe any decrypted playback temp files now (the
+        // external player, if any, has already received its copy by this point).
+        playbackPreparer.clearTemp()
         scope.launch {
             val autoLock = preferences.settings.first().autoLock
             if (autoLock) session.lock()

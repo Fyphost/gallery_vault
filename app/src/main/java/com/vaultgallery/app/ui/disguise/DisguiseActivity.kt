@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.FragmentActivity
+import androidx.lifecycle.lifecycleScope
 import com.vaultgallery.app.MainActivity
 import com.vaultgallery.app.domain.model.VaultScope
 import com.vaultgallery.app.security.VaultSession
@@ -13,6 +14,9 @@ import com.vaultgallery.app.security.crypto.CredentialManager
 import com.vaultgallery.app.ui.LocaleManager
 import com.vaultgallery.app.ui.theme.VaultTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -46,23 +50,23 @@ class DisguiseActivity : FragmentActivity() {
     }
 
     /**
-     * Called when the user presses "=" with a pure-numeric expression. If it matches
-     * a configured credential we open the corresponding vault; otherwise we return
-     * false so the calculator just shows the computed result.
+     * Called when the user presses "=" with a pure-numeric expression. Verification
+     * (Keystore + PBKDF2) runs off the main thread so the calculator stays snappy;
+     * if the entry matches a configured credential we open the corresponding vault.
+     * Otherwise nothing happens and the calculator just shows the computed result.
      */
-    private fun handleSecret(entered: String): Boolean {
-        if (!credentialManager.isVaultConfigured) {
-            // First run: a fixed opener code lets the user reach onboarding.
-            if (entered == FIRST_RUN_OPENER) {
-                launchVault(VaultScope.REAL)
-                return true
+    private fun handleSecret(entered: String) {
+        lifecycleScope.launch {
+            val matched = withContext(Dispatchers.Default) {
+                if (!credentialManager.isVaultConfigured) {
+                    if (entered == FIRST_RUN_OPENER) VaultScope.REAL else null
+                } else when (credentialManager.verify(entered)) {
+                    CredentialManager.Match.REAL -> VaultScope.REAL
+                    CredentialManager.Match.FAKE -> VaultScope.DECOY
+                    CredentialManager.Match.NONE -> null
+                }
             }
-            return false
-        }
-        return when (credentialManager.verify(entered)) {
-            CredentialManager.Match.REAL -> { launchVault(VaultScope.REAL); true }
-            CredentialManager.Match.FAKE -> { launchVault(VaultScope.DECOY); true }
-            CredentialManager.Match.NONE -> false
+            matched?.let { launchVault(it) }
         }
     }
 

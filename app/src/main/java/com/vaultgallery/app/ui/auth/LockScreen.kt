@@ -1,22 +1,24 @@
 package com.vaultgallery.app.ui.auth
 
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Backspace
+import androidx.compose.material.icons.automirrored.filled.Backspace
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Fingerprint
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -26,9 +28,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -38,11 +37,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.vaultgallery.app.R
 import com.vaultgallery.app.security.BiometricAuthenticator
 
-private const val PIN_LENGTH = 6
+private const val MAX_PIN = 10
 
 /**
- * The in-app lock screen shown when the session is locked (e.g. after auto-lock).
- * Disguised as a generic numeric keypad; supports biometric unlock too.
+ * In-app lock screen shown when the session locks (e.g. after auto-lock). Modern
+ * Material 3 keypad with ripple feedback, supports variable-length PINs (confirm
+ * with the check key) and biometric unlock.
  */
 @Composable
 fun LockScreen(
@@ -50,100 +50,90 @@ fun LockScreen(
     viewModel: AuthViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
-    val context = LocalContext.current
-    val activity = context as? FragmentActivity
+    val context = LocalContextActivity()
 
-    // Offer biometric immediately if enabled & available.
+    fun promptBiometric() {
+        val activity = context ?: return
+        if (!BiometricAuthenticator.isAvailable(activity)) return
+        BiometricAuthenticator.authenticate(
+            activity = activity,
+            title = activity.getString(R.string.biometric_title),
+            subtitle = activity.getString(R.string.biometric_subtitle),
+            negativeButton = activity.getString(R.string.biometric_cancel),
+            onSuccess = { viewModel.onBiometricSuccess(onUnlocked) },
+            onError = {},
+            onFailed = {}
+        )
+    }
+
     LaunchedEffect(state.biometricEnabled) {
-        if (state.biometricEnabled && activity != null && BiometricAuthenticator.isAvailable(activity)) {
-            BiometricAuthenticator.authenticate(
-                activity = activity,
-                title = context.getString(R.string.biometric_title),
-                subtitle = context.getString(R.string.biometric_subtitle),
-                negativeButton = context.getString(R.string.biometric_cancel),
-                onSuccess = { viewModel.onBiometricSuccess(onUnlocked) },
-                onError = {},
-                onFailed = {}
-            )
-        }
+        if (state.biometricEnabled) promptBiometric()
     }
 
     Surface(modifier = Modifier.fillMaxSize()) {
-        Column(
+        androidx.compose.foundation.layout.Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Icon(
-                Icons.Default.Lock,
-                contentDescription = null,
-                modifier = Modifier.size(48.dp),
-                tint = MaterialTheme.colorScheme.primary
-            )
-            Spacer(Modifier.height(16.dp))
+            Surface(
+                shape = CircleShape,
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.size(72.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        Icons.Default.Lock,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
+            }
+            Spacer(Modifier.height(20.dp))
             Text(
                 text = stringResource(R.string.enter_pin),
                 style = MaterialTheme.typography.titleMedium
             )
-            Spacer(Modifier.height(24.dp))
+            Spacer(Modifier.height(20.dp))
 
-            // PIN dots
-            Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                repeat(PIN_LENGTH) { i ->
-                    val filled = i < state.pin.length
-                    Box(
-                        modifier = Modifier
-                            .size(16.dp)
-                            .clip(CircleShape)
-                            .then(Modifier),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Surface(
-                            modifier = Modifier.size(16.dp),
-                            shape = CircleShape,
-                            color = if (filled) MaterialTheme.colorScheme.primary
-                            else MaterialTheme.colorScheme.surfaceVariant
-                        ) {}
-                    }
-                }
-            }
+            PinDots(count = state.pin.length, error = state.error != null)
+
             if (state.error != null) {
                 Spacer(Modifier.height(12.dp))
-                Text(
-                    stringResource(R.string.wrong_pin),
-                    color = MaterialTheme.colorScheme.error
-                )
+                Text(stringResource(R.string.wrong_pin), color = MaterialTheme.colorScheme.error)
             }
-            Spacer(Modifier.height(32.dp))
+            Spacer(Modifier.height(28.dp))
 
             Keypad(
-                onDigit = { d ->
-                    if (state.pin.length < PIN_LENGTH) {
-                        val newPin = state.pin + d
-                        viewModel.onPinChange(newPin)
-                        if (newPin.length == PIN_LENGTH && activity != null) {
-                            viewModel.submitPin(activity, onUnlocked)
-                        }
-                    }
-                },
+                onDigit = { d -> if (state.pin.length < MAX_PIN) viewModel.onPinChange(state.pin + d) },
                 onBackspace = { viewModel.onPinChange(state.pin.dropLast(1)) },
-                onBiometric = {
-                    if (state.biometricEnabled && activity != null) {
-                        BiometricAuthenticator.authenticate(
-                            activity = activity,
-                            title = context.getString(R.string.biometric_title),
-                            subtitle = context.getString(R.string.biometric_subtitle),
-                            negativeButton = context.getString(R.string.biometric_cancel),
-                            onSuccess = { viewModel.onBiometricSuccess(onUnlocked) },
-                            onError = {},
-                            onFailed = {}
-                        )
-                    }
-                },
+                onConfirm = { context?.let { viewModel.submitPin(it, onUnlocked) } },
+                onBiometric = { promptBiometric() },
                 showBiometric = state.biometricEnabled
             )
+        }
+    }
+}
+
+@Composable
+private fun PinDots(count: Int, error: Boolean) {
+    Row(horizontalArrangement = Arrangement.spacedBy(14.dp)) {
+        val shown = count.coerceAtMost(MAX_PIN)
+        repeat(if (shown == 0) 4 else shown.coerceAtLeast(4)) { i ->
+            val filled = i < count
+            val dotSize by animateDpAsState(targetValue = if (filled) 16.dp else 12.dp, label = "dot")
+            Surface(
+                modifier = Modifier.size(dotSize),
+                shape = CircleShape,
+                color = when {
+                    error -> MaterialTheme.colorScheme.error
+                    filled -> MaterialTheme.colorScheme.primary
+                    else -> MaterialTheme.colorScheme.surfaceVariant
+                }
+            ) {}
         }
     }
 }
@@ -152,6 +142,7 @@ fun LockScreen(
 private fun Keypad(
     onDigit: (String) -> Unit,
     onBackspace: () -> Unit,
+    onConfirm: () -> Unit,
     onBiometric: () -> Unit,
     showBiometric: Boolean
 ) {
@@ -161,39 +152,56 @@ private fun Keypad(
         listOf("7", "8", "9"),
         listOf("bio", "0", "del")
     )
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    androidx.compose.foundation.layout.Column(horizontalAlignment = Alignment.CenterHorizontally) {
         rows.forEach { row ->
-            Row(horizontalArrangement = Arrangement.spacedBy(24.dp)) {
+            Row(horizontalArrangement = Arrangement.spacedBy(20.dp)) {
                 row.forEach { key ->
                     when (key) {
-                        "bio" -> KeypadButton(enabled = showBiometric, onClick = onBiometric) {
-                            if (showBiometric) Icon(Icons.Default.Fingerprint, null, Modifier.size(28.dp))
+                        "bio" -> KeyButton(onClick = onBiometric, enabled = showBiometric) {
+                            if (showBiometric) Icon(Icons.Default.Fingerprint, "Biometric")
                         }
-                        "del" -> KeypadButton(onClick = onBackspace) {
-                            Icon(Icons.Default.Backspace, null, Modifier.size(28.dp))
+                        "del" -> KeyButton(onClick = onBackspace) {
+                            Icon(Icons.AutoMirrored.Filled.Backspace, "Delete")
                         }
-                        else -> KeypadButton(onClick = { onDigit(key) }) {
-                            Text(key, fontSize = 28.sp, fontWeight = FontWeight.Medium)
+                        else -> KeyButton(onClick = { onDigit(key) }) {
+                            Text(key, fontSize = 26.sp, fontWeight = FontWeight.Medium)
                         }
                     }
                 }
             }
-            Spacer(Modifier.height(20.dp))
+            Spacer(Modifier.height(16.dp))
+        }
+        FilledTonalIconButton(
+            onClick = onConfirm,
+            modifier = Modifier.size(72.dp),
+            colors = IconButtonDefaults.filledTonalIconButtonColors(
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary
+            )
+        ) {
+            Icon(Icons.Default.Check, contentDescription = "Unlock", modifier = Modifier.size(32.dp))
         }
     }
 }
 
 @Composable
-private fun KeypadButton(
+private fun KeyButton(
     enabled: Boolean = true,
     onClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .size(72.dp)
-            .clip(CircleShape)
-            .clickable(enabled = enabled, onClick = onClick),
-        contentAlignment = Alignment.Center
-    ) { content() }
+    FilledTonalIconButton(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = Modifier.size(72.dp)
+    ) {
+        if (enabled) content() else Spacer(Modifier.size(1.dp))
+    }
+}
+
+/** Resolves the current [FragmentActivity] (needed for BiometricPrompt). */
+@Composable
+private fun LocalContextActivity(): FragmentActivity? {
+    val ctx = androidx.compose.ui.platform.LocalContext.current
+    return ctx as? FragmentActivity
 }

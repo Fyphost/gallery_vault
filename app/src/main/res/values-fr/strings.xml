@@ -38,7 +38,7 @@
     <string name="setting_biometric">Déverrouillage biométrique</string>
     <string name="setting_autolock">Verrouillage auto en arrière-plan</string>
     <string name="setting_screenshot">Bloquer les captures</string>
-    <string name="setting_intruder">Selfie d''intrus en cas d''échec</string>
+    <string name="setting_intruder">Selfie d\'intrus en cas d\'échec</string>
     <string name="setting_decoy">Coffre leurre</string>
     <string name="setting_theme">Thème</string>
     <string name="setting_dynamic_color">Couleur dynamique</string>
@@ -48,7 +48,7 @@
     <string name="theme_dark">Sombre</string>
 
     <string name="playback_speed">Vitesse</string>
-    <string name="pip_mode">Image dans l''image</string>
+    <string name="pip_mode">Image dans l\'image</string>
     <string name="subtitles">Sous-titres</string>
     <string name="open_with_external">Ouvrir avec un lecteur externe</string>
 
@@ -57,7 +57,7 @@
     <string name="onboard_security_title">Chiffrement fort</string>
     <string name="onboard_security_body">Tout est chiffré en AES-256 et protégé par votre PIN ou la biométrie.</string>
     <string name="onboard_disguise_title">Caché à la vue de tous</string>
-    <string name="onboard_disguise_body">Sur votre écran d''accueil, cela ressemble à une calculatrice. Vous seul connaissez le secret.</string>
+    <string name="onboard_disguise_body">Sur votre écran d\'accueil, cela ressemble à une calculatrice. Vous seul connaissez le secret.</string>
     <string name="onboard_get_started">Commencer</string>
     <string name="onboard_next">Suivant</string>
 </resources>

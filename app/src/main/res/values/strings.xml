@@ -1,0 +1,72 @@
+<resources>
+    <!-- The internal product name (shown only inside the unlocked vault) -->
+    <string name="app_name">Vault Gallery</string>
+
+    <!-- Disguise labels shown on the home screen launcher -->
+    <string name="disguise_app_name">Calculator</string>
+    <string name="disguise_notes_name">Quick Notes</string>
+    <string name="disguise_cleaner_name">Storage Cleaner</string>
+
+    <!-- Auth -->
+    <string name="enter_pin">Enter PIN</string>
+    <string name="create_pin">Create a PIN</string>
+    <string name="confirm_pin">Confirm PIN</string>
+    <string name="wrong_pin">Incorrect PIN</string>
+    <string name="use_biometric">Use biometric unlock</string>
+    <string name="biometric_title">Unlock Vault</string>
+    <string name="biometric_subtitle">Confirm your identity</string>
+    <string name="biometric_cancel">Use PIN</string>
+
+    <!-- Gallery -->
+    <string name="tab_photos">Photos</string>
+    <string name="tab_videos">Videos</string>
+    <string name="tab_albums">Albums</string>
+    <string name="tab_settings">Settings</string>
+    <string name="import_media">Import media</string>
+    <string name="search_hint">Search vault</string>
+    <string name="empty_vault">Your vault is empty. Tap import to add media.</string>
+    <string name="view_grid">Grid view</string>
+    <string name="view_list">List view</string>
+
+    <!-- Sort/filter -->
+    <string name="sort_date_desc">Newest first</string>
+    <string name="sort_date_asc">Oldest first</string>
+    <string name="sort_name">Name</string>
+    <string name="sort_size">Size</string>
+    <string name="filter_all">All</string>
+    <string name="filter_images">Images</string>
+    <string name="filter_videos">Videos</string>
+
+    <!-- Settings -->
+    <string name="settings_security">Security</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_player">Video player</string>
+    <string name="settings_language">Language</string>
+    <string name="setting_biometric">Biometric unlock</string>
+    <string name="setting_autolock">Auto-lock when minimized</string>
+    <string name="setting_screenshot">Block screenshots</string>
+    <string name="setting_intruder">Intruder selfie on failed unlock</string>
+    <string name="setting_decoy">Decoy / fake vault</string>
+    <string name="setting_theme">Theme</string>
+    <string name="setting_dynamic_color">Dynamic color</string>
+    <string name="setting_external_player">Use external player (XPlayer)</string>
+    <string name="theme_system">System default</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+
+    <!-- Player -->
+    <string name="playback_speed">Playback speed</string>
+    <string name="pip_mode">Picture-in-picture</string>
+    <string name="subtitles">Subtitles</string>
+    <string name="open_with_external">Open with external player</string>
+
+    <!-- Onboarding -->
+    <string name="onboard_welcome_title">Welcome</string>
+    <string name="onboard_welcome_body">Hide your private photos and videos behind a secure, encrypted vault disguised as an everyday app.</string>
+    <string name="onboard_security_title">Strong encryption</string>
+    <string name="onboard_security_body">Everything is encrypted with AES-256 and locked behind your PIN or biometrics.</string>
+    <string name="onboard_disguise_title">Hidden in plain sight</string>
+    <string name="onboard_disguise_body">On your home screen this app looks like a calculator. Only you know the secret.</string>
+    <string name="onboard_get_started">Get started</string>
+    <string name="onboard_next">Next</string>
+</resources>

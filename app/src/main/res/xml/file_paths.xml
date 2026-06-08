@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- Temporary decrypted files handed to external players live in cache only
+         and are deleted as soon as playback finishes. -->
+    <cache-path name="vault_temp" path="vault_temp/" />
+</paths>

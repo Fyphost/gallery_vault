@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Galería Segura</string>
+    <string name="disguise_app_name">Calculadora</string>
+    <string name="disguise_notes_name">Notas rápidas</string>
+    <string name="disguise_cleaner_name">Limpiador</string>
+
+    <string name="enter_pin">Introduce el PIN</string>
+    <string name="create_pin">Crea un PIN</string>
+    <string name="confirm_pin">Confirma el PIN</string>
+    <string name="wrong_pin">PIN incorrecto</string>
+    <string name="use_biometric">Usar desbloqueo biométrico</string>
+    <string name="biometric_title">Desbloquear bóveda</string>
+    <string name="biometric_subtitle">Confirma tu identidad</string>
+    <string name="biometric_cancel">Usar PIN</string>
+
+    <string name="tab_photos">Fotos</string>
+    <string name="tab_videos">Vídeos</string>
+    <string name="tab_albums">Álbumes</string>
+    <string name="tab_settings">Ajustes</string>
+    <string name="import_media">Importar</string>
+    <string name="search_hint">Buscar</string>
+    <string name="empty_vault">Tu bóveda está vacía. Toca importar para añadir.</string>
+    <string name="view_grid">Cuadrícula</string>
+    <string name="view_list">Lista</string>
+
+    <string name="sort_date_desc">Más recientes</string>
+    <string name="sort_date_asc">Más antiguos</string>
+    <string name="sort_name">Nombre</string>
+    <string name="sort_size">Tamaño</string>
+    <string name="filter_all">Todos</string>
+    <string name="filter_images">Imágenes</string>
+    <string name="filter_videos">Vídeos</string>
+
+    <string name="settings_security">Seguridad</string>
+    <string name="settings_appearance">Apariencia</string>
+    <string name="settings_player">Reproductor</string>
+    <string name="settings_language">Idioma</string>
+    <string name="setting_biometric">Desbloqueo biométrico</string>
+    <string name="setting_autolock">Bloqueo automático al minimizar</string>
+    <string name="setting_screenshot">Bloquear capturas</string>
+    <string name="setting_intruder">Selfie de intruso al fallar</string>
+    <string name="setting_decoy">Bóveda señuelo</string>
+    <string name="setting_theme">Tema</string>
+    <string name="setting_dynamic_color">Color dinámico</string>
+    <string name="setting_external_player">Usar reproductor externo (XPlayer)</string>
+    <string name="theme_system">Predeterminado</string>
+    <string name="theme_light">Claro</string>
+    <string name="theme_dark">Oscuro</string>
+
+    <string name="playback_speed">Velocidad</string>
+    <string name="pip_mode">Imagen en imagen</string>
+    <string name="subtitles">Subtítulos</string>
+    <string name="open_with_external">Abrir con reproductor externo</string>
+
+    <string name="onboard_welcome_title">Bienvenido</string>
+    <string name="onboard_welcome_body">Oculta tus fotos y vídeos privados tras una bóveda cifrada disfrazada de app cotidiana.</string>
+    <string name="onboard_security_title">Cifrado fuerte</string>
+    <string name="onboard_security_body">Todo se cifra con AES-256 y se protege con tu PIN o biometría.</string>
+    <string name="onboard_disguise_title">Oculto a plena vista</string>
+    <string name="onboard_disguise_body">En tu pantalla de inicio parece una calculadora. Solo tú conoces el secreto.</string>
+    <string name="onboard_get_started">Empezar</string>
+    <string name="onboard_next">Siguiente</string>
+</resources>

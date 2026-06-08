@@ -1,0 +1,63 @@
+<resources>
+    <string name="app_name">Galerie Sécurisée</string>
+    <string name="disguise_app_name">Calculatrice</string>
+    <string name="disguise_notes_name">Notes rapides</string>
+    <string name="disguise_cleaner_name">Nettoyeur</string>
+
+    <string name="enter_pin">Saisir le code PIN</string>
+    <string name="create_pin">Créer un PIN</string>
+    <string name="confirm_pin">Confirmer le PIN</string>
+    <string name="wrong_pin">PIN incorrect</string>
+    <string name="use_biometric">Déverrouillage biométrique</string>
+    <string name="biometric_title">Déverrouiller le coffre</string>
+    <string name="biometric_subtitle">Confirmez votre identité</string>
+    <string name="biometric_cancel">Utiliser le PIN</string>
+
+    <string name="tab_photos">Photos</string>
+    <string name="tab_videos">Vidéos</string>
+    <string name="tab_albums">Albums</string>
+    <string name="tab_settings">Réglages</string>
+    <string name="import_media">Importer</string>
+    <string name="search_hint">Rechercher</string>
+    <string name="empty_vault">Votre coffre est vide. Touchez importer pour ajouter.</string>
+    <string name="view_grid">Grille</string>
+    <string name="view_list">Liste</string>
+
+    <string name="sort_date_desc">Plus récents</string>
+    <string name="sort_date_asc">Plus anciens</string>
+    <string name="sort_name">Nom</string>
+    <string name="sort_size">Taille</string>
+    <string name="filter_all">Tous</string>
+    <string name="filter_images">Images</string>
+    <string name="filter_videos">Vidéos</string>
+
+    <string name="settings_security">Sécurité</string>
+    <string name="settings_appearance">Apparence</string>
+    <string name="settings_player">Lecteur</string>
+    <string name="settings_language">Langue</string>
+    <string name="setting_biometric">Déverrouillage biométrique</string>
+    <string name="setting_autolock">Verrouillage auto en arrière-plan</string>
+    <string name="setting_screenshot">Bloquer les captures</string>
+    <string name="setting_intruder">Selfie d''intrus en cas d''échec</string>
+    <string name="setting_decoy">Coffre leurre</string>
+    <string name="setting_theme">Thème</string>
+    <string name="setting_dynamic_color">Couleur dynamique</string>
+    <string name="setting_external_player">Lecteur externe (XPlayer)</string>
+    <string name="theme_system">Système</string>
+    <string name="theme_light">Clair</string>
+    <string name="theme_dark">Sombre</string>
+
+    <string name="playback_speed">Vitesse</string>
+    <string name="pip_mode">Image dans l''image</string>
+    <string name="subtitles">Sous-titres</string>
+    <string name="open_with_external">Ouvrir avec un lecteur externe</string>
+
+    <string name="onboard_welcome_title">Bienvenue</string>
+    <string name="onboard_welcome_body">Cachez vos photos et vidéos privées dans un coffre chiffré déguisé en application ordinaire.</string>
+    <string name="onboard_security_title">Chiffrement fort</string>
+    <string name="onboard_security_body">Tout est chiffré en AES-256 et protégé par votre PIN ou la biométrie.</string>
+    <string name="onboard_disguise_title">Caché à la vue de tous</string>
+    <string name="onboard_disguise_body">Sur votre écran d''accueil, cela ressemble à une calculatrice. Vous seul connaissez le secret.</string>
+    <string name="onboard_get_started">Commencer</string>
+    <string name="onboard_next">Suivant</string>
+</resources>

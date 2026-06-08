@@ -1,5 +1,6 @@
 package com.vaultgallery.app.ui.image
 
+import android.content.Context
 import coil.ImageLoader
 import coil.decode.DataSource
 import coil.decode.ImageSource
@@ -20,7 +21,8 @@ import java.io.File
  */
 class EncryptedImageFetcher(
     private val data: EncryptedImage,
-    private val cryptoEngine: CryptoEngine
+    private val cryptoEngine: CryptoEngine,
+    private val context: Context
 ) : Fetcher {
 
     override suspend fun fetch(): FetchResult {
@@ -30,14 +32,19 @@ class EncryptedImageFetcher(
             buffer.writeAll(src)
         }
         return SourceResult(
-            source = ImageSource(buffer, fileSystem = okio.FileSystem.SYSTEM),
+            // Context-based ImageSource factory (stable across Coil 2.x). The decrypted
+            // bytes live only in this in-memory Buffer.
+            source = ImageSource(source = buffer, context = context),
             mimeType = null,
             dataSource = DataSource.DISK
         )
     }
 
-    class Factory(private val cryptoEngine: CryptoEngine) : Fetcher.Factory<EncryptedImage> {
+    class Factory(
+        private val cryptoEngine: CryptoEngine,
+        private val context: Context
+    ) : Fetcher.Factory<EncryptedImage> {
         override fun create(data: EncryptedImage, options: Options, imageLoader: ImageLoader): Fetcher =
-            EncryptedImageFetcher(data, cryptoEngine)
+            EncryptedImageFetcher(data, cryptoEngine, context)
     }
 }

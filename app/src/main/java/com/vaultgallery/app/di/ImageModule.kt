@@ -27,7 +27,7 @@ object ImageModule {
         cryptoEngine: CryptoEngine
     ): ImageLoader = ImageLoader.Builder(context)
         .components {
-            add(EncryptedImageFetcher.Factory(cryptoEngine))
+            add(EncryptedImageFetcher.Factory(cryptoEngine, context))
         }
         .crossfade(true)
         .build()

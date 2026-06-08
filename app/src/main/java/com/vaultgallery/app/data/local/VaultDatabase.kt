@@ -23,7 +23,7 @@ class Converters {
 @Database(
     entities = [MediaItemEntity::class, AlbumEntity::class, IntruderLogEntity::class],
     version = 1,
-    exportSchema = true
+    exportSchema = false
 )
 @TypeConverters(Converters::class)
 abstract class VaultDatabase : RoomDatabase() {

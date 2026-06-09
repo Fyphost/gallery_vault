@@ -52,7 +52,7 @@ fun VaultApp(shellViewModel: AppShellViewModel = hiltViewModel()) {
         LaunchedEffect(unlocked) {
             if (current.onboarded && !unlocked) {
                 navController.navigate(Routes.LOCK) {
-                    popUpTo(0) { inclusive = true }
+                    popUpTo(navController.graph.id) { inclusive = true }
                     launchSingleTop = true
                 }
             }
